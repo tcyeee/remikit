@@ -3,27 +3,26 @@ import 'package:yaml/yaml.dart';
 import 'scalar_editor.dart';
 
 /// A widget that recursively displays and edits a YAML node (Map, List, or Scalar).
-/// 
+///
 /// This widget handles the layout for nested structures and delegates scalar editing
 /// to [ScalarEditor].
 class YamlNodeWidget extends StatelessWidget {
   /// The YAML node to display (can be YamlMap, YamlList, or a scalar value).
   final dynamic node;
-  
+
   /// The path to this node in the YAML structure.
   final List<dynamic> path;
-  
+
   /// Callback triggered when a value within this node is changed.
   final Function(List<dynamic> path, dynamic value) onChanged;
 
-  const YamlNodeWidget({
-    super.key, 
-    required this.node, 
-    required this.path, 
-    required this.onChanged
-  });
+  const YamlNodeWidget({super.key, required this.node, required this.path, required this.onChanged});
 
   @override
+  /// Builds the widget based on the type of [node].
+  ///
+  /// Renders a [Column] for Maps and Lists, a [Switch] for booleans,
+  /// and a [ScalarEditor] for other values.
   Widget build(BuildContext context) {
     if (node is YamlMap) {
       final map = node as YamlMap;
@@ -40,11 +39,7 @@ class YamlNodeWidget extends StatelessWidget {
                   child: Text('${e.key}: ', style: const TextStyle(fontWeight: FontWeight.bold)),
                 ),
                 Expanded(
-                  child: YamlNodeWidget(
-                    node: e.value, 
-                    path: [...path, e.key], 
-                    onChanged: onChanged
-                  ),
+                  child: YamlNodeWidget(node: e.value, path: [...path, e.key], onChanged: onChanged),
                 ),
               ],
             ),
@@ -69,11 +64,7 @@ class YamlNodeWidget extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: YamlNodeWidget(
-                    node: e.value, 
-                    path: [...path, e.key], 
-                    onChanged: onChanged
-                  ),
+                  child: YamlNodeWidget(node: e.value, path: [...path, e.key], onChanged: onChanged),
                 ),
               ],
             ),
@@ -82,19 +73,11 @@ class YamlNodeWidget extends StatelessWidget {
       );
     } else if (node is bool) {
       return Row(
-        children: [
-          Switch(
-            value: node as bool, 
-            onChanged: (value) => onChanged(path, value)
-          )
-        ],
+        children: [Switch(value: node as bool, onChanged: (value) => onChanged(path, value))],
       );
     } else {
       // String, int, double, null, etc.
-      return ScalarEditor(
-        value: node, 
-        onChanged: (value) => onChanged(path, value)
-      );
+      return ScalarEditor(value: node, onChanged: (value) => onChanged(path, value));
     }
   }
 }

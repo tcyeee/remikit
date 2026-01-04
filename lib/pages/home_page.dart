@@ -7,7 +7,7 @@ import '../services/rime_config_service.dart';
 import '../widgets/yaml_editor/config_editor.dart';
 
 /// The main home page of the application.
-/// 
+///
 /// This page displays the configuration editor and the raw source code view.
 /// It handles loading and saving the configuration using [RimeConfigService].
 class MyHomePage extends StatefulWidget {
@@ -28,6 +28,9 @@ class _MyHomePageState extends State<MyHomePage> {
   bool _isSaving = false;
 
   @override
+  /// Initializes the state of the home page.
+  ///
+  /// This method calls [_loadConfig] to load the initial configuration.
   void initState() {
     super.initState();
     _loadConfig();
@@ -105,6 +108,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
+  /// Builds the UI for the home page.
+  ///
+  /// Displays a tab bar with two views: "Visual Editor" and "Source Code".
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
@@ -168,6 +174,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  /// Builds the visual editor view.
+  ///
+  /// Returns a [ConfigEditorWidget] if data is loaded, or a message if not.
   Widget _buildEditorView() {
     if (_parsedYaml == null) {
       return const Center(child: Text('No data'));

@@ -23,6 +23,7 @@ class ConfigEditorWidget extends StatelessWidget {
   });
 
   @override
+  /// Builds the [YamlNodeWidget] with the root node.
   Widget build(BuildContext context) {
     return YamlNodeWidget(node: node, path: path, onChanged: onChanged);
   }

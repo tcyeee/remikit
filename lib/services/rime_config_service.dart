@@ -3,6 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 
 class RimeConfigService {
+  /// Reads the Rime configuration file from the default location.
+  ///
+  /// Returns a record containing the [path] and [content] of the file, or null if not found.
   Future<({String path, String content})?> readConfig() async {
     String? configPath = _getConfigPath();
     if (configPath == null) {
@@ -22,6 +25,9 @@ class RimeConfigService {
     return null;
   }
 
+  /// Gets the path to the Rime configuration file based on the platform.
+  ///
+  /// Checks standard locations for macOS and Windows.
   String? _getConfigPath() {
     if (Platform.isMacOS) {
       final home = Platform.environment['HOME'];

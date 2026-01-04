@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 
 class RimeConfigService {
@@ -14,22 +15,11 @@ class RimeConfigService {
         final content = await file.readAsString();
         return (path: configPath, content: content);
       } catch (e) {
-        print('Error reading config file: $e');
+        debugPrint('Error reading config file: $e');
         return null;
       }
     }
     return null;
-  }
-
-  Future<bool> saveConfig(String path, String content) async {
-    final file = File(path);
-    try {
-      await file.writeAsString(content);
-      return true;
-    } catch (e) {
-      print('Error writing config file: $e');
-      return false;
-    }
   }
 
   String? _getConfigPath() {

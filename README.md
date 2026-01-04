@@ -1,16 +1,11 @@
-# remikit
+## RemiKit
 
-A new Flutter project.
+当前(2026-01-04)项目还未完成基础版本，等待后续更新
 
-## Getting Started
+### 计划功能
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. 提供Remi软件包CDN下载加速
+2. 简单高效的配置UI
+3. 一站式词库上传/下载
+4. 一站式输入法上传/下载
+5. 一站式输入样式上传/下载

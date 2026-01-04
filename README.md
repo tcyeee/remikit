@@ -9,3 +9,9 @@
 3. 一站式词库上传/下载
 4. 一站式输入法上传/下载
 5. 一站式输入样式上传/下载
+
+### macOS M1/M2 (Apple Silicon) RUN
+
+```bash
+arch -arm64 flutter run -d macos
+```

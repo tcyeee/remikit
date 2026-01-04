@@ -10,14 +10,17 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
   /// Builds the widget tree for the application.
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Remikit',
+      title: 'Remi',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple), useMaterial3: true),
-      home: const MyHomePage(title: 'Remikit Home Page'),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 137, 138, 220)),
+        useMaterial3: true,
+      ),
+      home: const MyHomePage(title: 'Remi 配置面板'),
     );
   }
 }

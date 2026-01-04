@@ -4,13 +4,10 @@ import 'package:path/path.dart' as p;
 
 class RimeConfigService {
   /// Reads the Rime configuration file from the default location.
-  ///
   /// Returns a record containing the [path] and [content] of the file, or null if not found.
   Future<({String path, String content})?> readConfig() async {
     String? configPath = _getConfigPath();
-    if (configPath == null) {
-      return null;
-    }
+    if (configPath == null) return null;
 
     final file = File(configPath);
     if (await file.exists()) {
@@ -26,7 +23,6 @@ class RimeConfigService {
   }
 
   /// Gets the path to the Rime configuration file based on the platform.
-  ///
   /// Checks standard locations for macOS and Windows.
   String? _getConfigPath() {
     if (Platform.isMacOS) {

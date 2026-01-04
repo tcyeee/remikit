@@ -11,29 +11,90 @@ import '../widgets/yaml_editor/config_editor.dart';
 /// This page displays the configuration editor and the raw source code view.
 /// It handles loading and saving the configuration using [RimeConfigService].
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
   final String title;
+  const MyHomePage({super.key, required this.title});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final _rimeConfigService = RimeConfigService();
+
   String _configContent = 'Loading...';
   String? _configPath;
   dynamic _parsedYaml;
   YamlEditor? _yamlEditor;
-  final _rimeConfigService = RimeConfigService();
   bool _isSaving = false;
 
   @override
-  /// Initializes the state of the home page.
-  ///
-  /// This method calls [_loadConfig] to load the initial configuration.
   void initState() {
     super.initState();
     _loadConfig();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+          title: Text(widget.title),
+          bottom: const TabBar(
+            tabs: [
+              Tab(text: 'Visual Editor'),
+              Tab(text: 'Source Code'),
+            ],
+          ),
+          actions: [
+            if (_configPath != null)
+              IconButton(
+                icon: _isSaving
+                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
+                    : const Icon(Icons.save),
+                onPressed: _isSaving ? null : _saveConfig,
+              ),
+          ],
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (_configPath != null)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SelectableText(
+                  'Path: $_configPath',
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+                ),
+              ),
+            Expanded(
+              child: TabBarView(
+                children: [
+                  // Editor View
+                  Container(
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: _buildEditorView(),
+                  ),
+                  // Source View
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8.0),
+                    child: SingleChildScrollView(
+                      child: SelectableText(_configContent, style: const TextStyle(fontFamily: 'monospace')),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   /// Loads the configuration from the file system.
@@ -107,83 +168,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  @override
-  /// Builds the UI for the home page.
-  ///
-  /// Displays a tab bar with two views: "Visual Editor" and "Source Code".
-  Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          title: Text(widget.title),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Visual Editor'),
-              Tab(text: 'Source Code'),
-            ],
-          ),
-          actions: [
-            if (_configPath != null)
-              IconButton(
-                icon: _isSaving
-                    ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2))
-                    : const Icon(Icons.save),
-                onPressed: _isSaving ? null : _saveConfig,
-              ),
-          ],
-        ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (_configPath != null)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SelectableText(
-                  'Path: $_configPath',
-                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-                ),
-              ),
-            Expanded(
-              child: TabBarView(
-                children: [
-                  // Editor View
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: _buildEditorView(),
-                  ),
-                  // Source View
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(8.0),
-                    child: SingleChildScrollView(
-                      child: SelectableText(_configContent, style: const TextStyle(fontFamily: 'monospace')),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   /// Builds the visual editor view.
-  ///
   /// Returns a [ConfigEditorWidget] if data is loaded, or a message if not.
   Widget _buildEditorView() {
-    if (_parsedYaml == null) {
-      return const Center(child: Text('No data'));
-    }
-    if (_parsedYaml is String) {
-      return Center(child: Text(_parsedYaml));
-    }
+    if (_parsedYaml == null) return const Center(child: Text('No data'));
+    if (_parsedYaml is String) return Center(child: Text(_parsedYaml));
     return SingleChildScrollView(
       padding: const EdgeInsets.all(8.0),
       child: ConfigEditorWidget(node: _parsedYaml, path: const [], onChanged: _updateConfig),
